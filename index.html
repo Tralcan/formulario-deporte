@@ -55,38 +55,39 @@
     <button type="submit">Enviar</button>
   </form>
 
+  <!-- Cargar la librería de Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
   <script>
-    // Reemplaza 'TU_SUPABASE_URL' y 'TU_SUPABASE_ANON_KEY' con tus credenciales Diego
-    const supabaseUrl = 'https://qqvkbwnyhjevrdyhvxbv.supabase.co';
-    const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxdmtid255aGpldnJkeWh2eGJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMwOTIxMTgsImV4cCI6MjA1ODY2ODExOH0.3ACxuOf_NWjzz0yYjxVPstVrG08pb1ulG-BNEofW6Yc';
-    const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
+    // Esperar a que el script de Supabase se haya cargado
+    window.addEventListener('load', function () {
+      const supabaseUrl = 'https://qqvkbwnyhjevrdyhvxbv.supabase.co';  // Reemplaza con tu URL de Supabase
+      const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxdmtid255aGpldnJkeWh2eGJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMwOTIxMTgsImV4cCI6MjA1ODY2ODExOH0.3ACxuOf_NWjzz0yYjxVPstVrG08pb1ulG-BNEofW6Yc';  // Reemplaza con tu key de Supabase
+      const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
 
-    document.getElementById('formulario').addEventListener('submit', async function(event) {
-      event.preventDefault();
-      
-      // Obtener los valores del formulario
-      const nombre = document.getElementById('nombre').value;
-      const deporte = document.getElementById('deporte').value;
-
-      // Insertar los datos en la base de datos de Supabase
-      const { data, error } = await supabase
-        .from('formularios')
-        .insert([
-          { nombre: nombre, deporte: deporte }
-        ]);
-
-      // Comprobar si ocurrió un error
-      if (error) {
-        console.error('Error al insertar datos:', error);
-        alert('Hubo un error al enviar el formulario.');
-      } else {
-        alert('Formulario enviado con éxito.');
+      // Configurar el evento del formulario
+      document.getElementById('formulario').addEventListener('submit', async function(event) {
+        event.preventDefault();
         
-        // Opcional: Limpiar los campos del formulario después del envío
-        document.getElementById('nombre').value = '';
-        document.getElementById('deporte').value = '';
-      }
+        const nombre = document.getElementById('nombre').value;
+        const deporte = document.getElementById('deporte').value;
+
+        // Insertar datos en Supabase
+        const { data, error } = await supabase
+          .from('formularios')  // Asegúrate de que esta tabla exista en tu base de datos
+          .insert([
+            { nombre: nombre, deporte: deporte }
+          ]);
+
+        if (error) {
+          console.error('Error al insertar datos:', error);
+          alert('Hubo un error al enviar el formulario.');
+        } else {
+          alert('Formulario enviado con éxito.');
+          document.getElementById('nombre').value = '';
+          document.getElementById('deporte').value = '';
+        }
+      });
     });
   </script>
 
