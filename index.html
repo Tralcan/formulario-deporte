@@ -1,95 +1,173 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Formulario de Deporte</title>
-  <!-- Agregar un estilo básico para el formulario -->
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background-color: #f0f0f0;
-    }
-    form {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 5px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      width: 300px;
-    }
-    input {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    button {
-      width: 100%;
-      padding: 10px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #45a049;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Deportivo</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a3c34, #2d6a4f);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+
+        .form-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2d6a4f;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #1a3c34;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #2d6a4f;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem;
+            background: #2d6a4f;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #1a3c34;
+        }
+    </style>
 </head>
 <body>
+    <div class="form-container">
+        <h1>Registro Deportivo</h1>
+        <form id="sportForm">
+            <div class="form-group">
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" name="nombre" required>
+            </div>
+            <div class="form-group">
+                <label for="apellido">Apellido</label>
+                <input type="text" id="apellido" name="apellido" required>
+            </div>
+            <div class="form-group">
+                <label for="deporte">Deporte</label>
+                <select id="deporte" name="deporte" required>
+                    <option value="">Selecciona un deporte</option>
+                    <option value="Atletismo">Atletismo</option>
+                    <!-- Las opciones se añadirán dinámicamente o puedes agregarlas manualmente -->
+                </select>
+            </div>
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
 
-  <form id="formulario">
-    <h2>Formulario de Deporte</h2>
-    <label for="nombre">Nombre:</label>
-    <input type="text" id="nombre" name="nombre" required>
-    <label for="deporte">Deporte:</label>
-    <input type="text" id="deporte" name="deporte" required>
-    <button type="submit">Enviar</button>
-  </form>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Inicializa Supabase (reemplaza con tus credenciales)
+        const supabase = Supabase.createClient(
+            'https://qqvkbwnyhjevrdyhvxbv.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxdmtid255aGpldnJkeWh2eGJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMwOTIxMTgsImV4cCI6MjA1ODY2ODExOH0.3ACxuOf_NWjzz0yYjxVPstVrG08pb1ulG-BNEofW6Yc'
+        );
 
-  <!-- Cargar la librería de Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+        // Elementos del formulario
+        const form = document.getElementById('sportForm');
+        const nombreInput = document.getElementById('nombre');
+        const apellidoInput = document.getElementById('apellido');
+        const deporteSelect = document.getElementById('deporte');
 
-  <script>
-    // Esperar a que el script de Supabase se haya cargado
-    window.addEventListener('load', function () {
-      const supabaseUrl = 'https://qqvkbwnyhjevrdyhvxbv.supabase.co';  // Reemplaza con tu URL de Supabase
-      const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxdmtid255aGpldnJkeWh2eGJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMwOTIxMTgsImV4cCI6MjA1ODY2ODExOH0.3ACxuOf_NWjzz0yYjxVPstVrG08pb1ulG-BNEofW6Yc';  // Reemplaza con tu key de Supabase
-      const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
+        // Cargar datos guardados al iniciar
+        async function loadData() {
+            const { data, error } = await supabase
+                .from('formulario') // Reemplaza con el nombre de tu tabla
+                .select('*')
+                .order('created_at', { ascending: false })
+                .limit(1);
 
-      // Configurar el evento del formulario
-      document.getElementById('formulario').addEventListener('submit', async function(event) {
-        event.preventDefault();
-        
-        const nombre = document.getElementById('nombre').value;
-        const deporte = document.getElementById('deporte').value;
+            if (error) {
+                console.error('Error al cargar datos:', error);
+                return;
+            }
 
-        // Insertar datos en Supabase
-        const { data, error } = await supabase
-          .from('formularios')  // Asegúrate de que esta tabla exista en tu base de datos
-          .insert([
-            { nombre: nombre, deporte: deporte }
-          ]);
-
-        if (error) {
-          console.error('Error al insertar datos:', error);
-          alert('Hubo un error al enviar el formulario.');
-        } else {
-          alert('Formulario enviado con éxito.');
-          document.getElementById('nombre').value = '';
-          document.getElementById('deporte').value = '';
+            if (data && data.length > 0) {
+                nombreInput.value = data[0].nombre;
+                apellidoInput.value = data[0].apellido;
+                deporteSelect.value = data[0].deporte;
+            }
         }
-      });
-    });
-  </script>
 
+        // Guardar datos en Supabase
+        async function saveData(nombre, apellido, deporte) {
+            const { data, error } = await supabase
+                .from('tu_tabla')
+                .insert([
+                    { nombre, apellido, deporte }
+                ]);
+
+            if (error) {
+                console.error('Error al guardar:', error);
+            } else {
+                console.log('Datos guardados:', data);
+                alert('¡Datos enviados correctamente!');
+            }
+        }
+
+        // Manejar el envío del formulario
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const nombre = nombreInput.value;
+            const apellido = apellidoInput.value;
+            const deporte = deporteSelect.value;
+
+            if (!nombre || !apellido || !deporte) {
+                alert('Por favor, completa todos los campos');
+                return;
+            }
+
+            await saveData(nombre, apellido, deporte);
+        });
+
+        // Cargar datos al iniciar la página
+        window.onload = loadData;
+
+        // Opcional: Añadir opciones al select manualmente
+        const deportes = ['Fútbol', 'Baloncesto', 'Tenis', 'Natación']; // Ejemplo
+        deportes.forEach(dep => {
+            const option = document.createElement('option');
+            option.value = dep;
+            option.textContent = dep;
+            deporteSelect.appendChild(option);
+        });
+    </script>
 </body>
 </html>
