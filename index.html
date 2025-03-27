@@ -146,32 +146,21 @@
             const rutInput = document.getElementById('rut');
             const deporteSelect = document.getElementById('deporte');
 
-            // Cargar datos guardados al iniciar
-            async function loadData() {
-                const { data, error } = await supabase
-                    .from('formulario')
-                    .select('*')
-                    .order('created_at', { ascending: false })
-                    .limit(1);
-
-                if (error) {
-                    console.error('Error al cargar datos:', error);
-                    return;
-                }
-
-                if (data && data.length > 0) {
-                    nombreInput.value = data[0].nombre;
-                    apellidoInput.value = data[0].apellido;
-                    rutInput.value = data[0].rut || ''; // Cargar RUT si existe
-                    deporteSelect.value = data[0].deporte;
-                }
+            // Cargar datos desde localStorage al iniciar
+            function loadLocalData() {
+                const savedData = JSON.parse(localStorage.getItem('sportFormData')) || {};
+                nombreInput.value = savedData.nombre || '';
+                apellidoInput.value = savedData.apellido || '';
+                rutInput.value = savedData.rut || '';
+                deporteSelect.value = savedData.deporte || '';
             }
 
-            // Guardar datos en Supabase
+            // Guardar datos en Supabase y localStorage
             async function saveData(nombre, apellido, rut, deporte) {
                 // Eliminar puntos y guiones del RUT
                 const cleanedRut = rut.replace(/[.-]/g, '');
 
+                // Guardar en Supabase
                 const { data, error } = await supabase
                     .from('formulario')
                     .insert([
@@ -181,7 +170,11 @@
                 if (error) {
                     console.error('Error al guardar:', error);
                 } else {
-                    console.log('Datos guardados:', data);
+                    console.log('Datos guardados en Supabase:', data);
+                    // Guardar en localStorage
+                    const formData = { nombre, apellido, rut: cleanedRut, deporte };
+                    localStorage.setItem('sportFormData', JSON.stringify(formData));
+                    // Mostrar imagen de éxito
                     form.classList.add('hidden');
                     formContainer.querySelector('h1').style.display = 'none';
                     formContainer.querySelector('h3').style.display = 'none';
@@ -205,8 +198,8 @@
                 await saveData(nombre, apellido, rut, deporte);
             });
 
-            // Cargar datos al iniciar la página
-            loadData();
+            // Cargar datos al iniciar la página desde localStorage
+            loadLocalData();
 
             // Añadir opciones al select
             const deportes = ['🏃🏽 Atletismo', '🏀 Básquebol', '🏓 Tenis de mesa', '🏁 Naciones', '🏐 Voleybol', '🏉 Rugby'];
