@@ -20,6 +20,34 @@
             });
         });
     </script>
+  <script>
+    // Reemplaza 'TU_SUPABASE_URL' y 'TU_SUPABASE_ANON_KEY' con tus credenciales
+    const supabaseUrl = 'https://qqvkbwnyhjevrdyhvxbv.supabase.co';
+    const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxdmtid255aGpldnJkeWh2eGJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMwOTIxMTgsImV4cCI6MjA1ODY2ODExOH0.3ACxuOf_NWjzz0yYjxVPstVrG08pb1ulG-BNEofW6Yc';
+    const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+    document.getElementById('formulario').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      const nombre = document.getElementById('nombre').value;
+      const deporte = document.getElementById('deporte').value;
+
+      const { data, error } = await supabase
+        .from('formularios')
+        .insert([
+          { nombre: nombre, deporte: deporte }
+        ]);
+
+      if (error) {
+        console.error('Error al insertar datos:', error);
+        alert('Hubo un error al enviar el formulario.');
+      } else {
+        alert('Formulario enviado con éxito.');
+        // Opcional: limpiar los campos del formulario
+        document.getElementById('nombre').value = '';
+        document.getElementById('deporte').value = '';
+      }
+    });
+  </script>
 </head>
 <body>
     <form id="formulario">
@@ -31,5 +59,6 @@
         <br>
         <button type="submit">Enviar</button>
     </form>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </body>
 </html>
