@@ -74,9 +74,8 @@
             background: #1a3c34;
         }
 
-        /* Estilos para la transición suave */
         .form-container form, .success-image {
-            transition: opacity 0.5s ease; /* Transición de 0.5 segundos */
+            transition: opacity 0.5s ease;
         }
 
         .form-container form.hidden {
@@ -85,8 +84,8 @@
         }
 
         .success-image {
-            display: none; /* Oculta por defecto */
-            opacity: 0; /* Empieza invisible */
+            display: none;
+            opacity: 0;
             max-width: 100%;
             height: auto;
             border-radius: 15px;
@@ -94,7 +93,7 @@
         }
 
         .success-image.visible {
-            opacity: 1; /* Se vuelve visible */
+            opacity: 1;
             display: block;
         }
     </style>
@@ -102,7 +101,7 @@
 <body>
     <div class="form-container" id="formContainer">
         <h1>Team Dragon 🐲</h1>
-        <h3>Asistencia Obligatoria</h3>
+        <h3>Asistencia</h3>
         <form id="sportForm">
             <div class="form-group">
                 <label for="nombre">Nombre</label>
@@ -111,6 +110,10 @@
             <div class="form-group">
                 <label for="apellido">Apellido</label>
                 <input type="text" id="apellido" name="apellido" required>
+            </div>
+            <div class="form-group">
+                <label for="rut">RUT</label>
+                <input type="text" id="rut" name="rut" required>
             </div>
             <div class="form-group">
                 <label for="deporte">Deporte</label>
@@ -140,6 +143,7 @@
             const successImage = document.getElementById('successImage');
             const nombreInput = document.getElementById('nombre');
             const apellidoInput = document.getElementById('apellido');
+            const rutInput = document.getElementById('rut');
             const deporteSelect = document.getElementById('deporte');
 
             // Cargar datos guardados al iniciar
@@ -158,23 +162,26 @@
                 if (data && data.length > 0) {
                     nombreInput.value = data[0].nombre;
                     apellidoInput.value = data[0].apellido;
+                    rutInput.value = data[0].rut || ''; // Cargar RUT si existe
                     deporteSelect.value = data[0].deporte;
                 }
             }
 
             // Guardar datos en Supabase
-            async function saveData(nombre, apellido, deporte) {
+            async function saveData(nombre, apellido, rut, deporte) {
+                // Eliminar puntos y guiones del RUT
+                const cleanedRut = rut.replace(/[.-]/g, '');
+
                 const { data, error } = await supabase
                     .from('formulario')
                     .insert([
-                        { nombre, apellido, deporte }
+                        { nombre, apellido, rut: cleanedRut, deporte }
                     ]);
 
                 if (error) {
                     console.error('Error al guardar:', error);
                 } else {
                     console.log('Datos guardados:', data);
-                    // Aplicar transición suave
                     form.classList.add('hidden');
                     formContainer.querySelector('h1').style.display = 'none';
                     formContainer.querySelector('h3').style.display = 'none';
@@ -187,14 +194,15 @@
                 e.preventDefault();
                 const nombre = nombreInput.value;
                 const apellido = apellidoInput.value;
+                const rut = rutInput.value;
                 const deporte = deporteSelect.value;
 
-                if (!nombre || !apellido || !deporte) {
+                if (!nombre || !apellido || !rut || !deporte) {
                     alert('Por favor, completa todos los campos');
                     return;
                 }
 
-                await saveData(nombre, apellido, deporte);
+                await saveData(nombre, apellido, rut, deporte);
             });
 
             // Cargar datos al iniciar la página
