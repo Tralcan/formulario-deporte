@@ -131,7 +131,7 @@
             // Guardar datos en Supabase
             async function saveData(nombre, apellido, deporte) {
                 const { data, error } = await supabase
-                    .from('tu_tabla')
+                    .from('formulario')
                     .insert([
                         { nombre, apellido, deporte }
                     ]);
