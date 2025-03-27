@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario Deportivo</title>
+    <title>Team Dragon 🐲</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #1a3c34, #2d6a4f);
+            background: url('https://images.unsplash.com/flagged/photo-1556554946-c10ef755bded?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') no-repeat center center fixed;
+            background-size: cover;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -29,6 +30,12 @@
             color: #2d6a4f;
             margin-bottom: 1.5rem;
             font-size: 2rem;
+        }
+        h3 {
+            text-align: center;
+            color: black;
+            margin-bottom: 1rem;
+            font-size: 1rem;
         }
 
         .form-group {
@@ -67,8 +74,9 @@
             background: #1a3c34;
         }
 
+        /* Estilos para la imagen de éxito */
         .success-image {
-            display: none;
+            display: none; /* Oculta por defecto */
             max-width: 100%;
             height: auto;
             border-radius: 15px;
@@ -78,7 +86,8 @@
 </head>
 <body>
     <div class="form-container" id="formContainer">
-        <h1>Registro Deportivo</h1>
+        <h1>Team Dragon 🐲</h1>
+        <h3>Asistencia</h3>
         <form id="sportForm">
             <div class="form-group">
                 <label for="nombre">Nombre</label>
@@ -99,89 +108,92 @@
         <img src="https://images.unsplash.com/photo-1541535651218-2d0f793c3e32?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Éxito" class="success-image" id="successImage">
     </div>
 
+    <!-- Cargar Supabase CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // Inicializa Supabase
-        const supabase = supabase.createClient(
-            'https://qqvkbwnyhjevrdyhvxbv.supabase.co', // Reemplaza con tu URL
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxdmtid255aGpldnJkeWh2eGJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMwOTIxMTgsImV4cCI6MjA1ODY2ODExOH0.3ACxuOf_NWjzz0yYjxVPstVrG08pb1ulG-BNEofW6Yc'      // Reemplaza con tu API Key
-        );
+        // Esperar a que el script de Supabase se cargue
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializa Supabase
+            const supabase = window.supabase.createClient(
+                'https://qqvkbwnyhjevrdyhvxbv.supabase.co',
+                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxdmtid255aGpldnJkeWh2eGJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMwOTIxMTgsImV4cCI6MjA1ODY2ODExOH0.3ACxuOf_NWjzz0yYjxVPstVrG08pb1ulG-BNEofW6Yc'
+            );
 
-        // Elementos del formulario
-        const form = document.getElementById('sportForm');
-        const formContainer = document.getElementById('formContainer');
-        const successImage = document.getElementById('successImage');
-        const nombreInput = document.getElementById('nombre');
-        const apellidoInput = document.getElementById('apellido');
-        const deporteSelect = document.getElementById('deporte');
+            // Elementos del formulario
+            const form = document.getElementById('sportForm');
+            const formContainer = document.getElementById('formContainer');
+            const successImage = document.getElementById('successImage');
+            const nombreInput = document.getElementById('nombre');
+            const apellidoInput = document.getElementById('apellido');
+            const deporteSelect = document.getElementById('deporte');
 
-        // Cargar datos guardados al iniciar
-        async function loadData() {
-            const { data, error } = await supabase
-                .from('formulario')
-                .select('*')
-                .order('created_at', { ascending: false })
-                .limit(1);
+            // Cargar datos guardados al iniciar
+            async function loadData() {
+                const { data, error } = await supabase
+                    .from('formulario')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(1);
 
-            if (error) {
-                console.error('Error al cargar datos:', error);
-                return;
+                if (error) {
+                    console.error('Error al cargar datos:', error);
+                    return;
+                }
+
+                if (data && data.length > 0) {
+                    nombreInput.value = data[0].nombre;
+                    apellidoInput.value = data[0].apellido;
+                    deporteSelect.value = data[0].deporte;
+                }
             }
 
-            if (data && data.length > 0) {
-                nombreInput.value = data[0].nombre;
-                apellidoInput.value = data[0].apellido;
-                deporteSelect.value = data[0].deporte;
-            }
-        }
+            // Guardar datos en Supabase
+            async function saveData(nombre, apellido, deporte) {
+                const { data, error } = await supabase
+                    .from('formulario')
+                    .insert([
+                        { nombre, apellido, deporte }
+                    ]);
 
-        // Guardar datos en Supabase
-        async function saveData(nombre, apellido, deporte) {
-            const { data, error } = await supabase
-                .from('formulario')
-                .insert([
-                    { nombre, apellido, deporte }
-                ]);
-
-            if (error) {
-                console.error('Error al guardar:', error);
-                alert('Error al enviar los datos');
-            } else {
-                console.log('Datos guardados:', data);
-                form.style.display = 'none';
-                formContainer.querySelector('h1').style.display = 'none';
-                successImage.style.display = 'block';
-            }
-        }
-
-        // Manejar el envío del formulario
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const nombre = nombreInput.value;
-            const apellido = apellidoInput.value;
-            const deporte = deporteSelect.value;
-
-            if (!nombre || !apellido || !deporte) {
-                alert('Por favor, completa todos los campos');
-                return;
+                if (error) {
+                    console.error('Error al guardar:', error);
+                } else {
+                    console.log('Datos guardados:', data);
+                    // Ocultar formulario y títulos, mostrar imagen
+                    form.style.display = 'none';
+                    formContainer.querySelector('h1').style.display = 'none';
+                    formContainer.querySelector('h3').style.display = 'none';
+                    successImage.style.display = 'block';
+                }
             }
 
-            await saveData(nombre, apellido, deporte);
+            // Manejar el envío del formulario
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const nombre = nombreInput.value;
+                const apellido = apellidoInput.value;
+                const deporte = deporteSelect.value;
+
+                if (!nombre || !apellido || !deporte) {
+                    alert('Por favor, completa todos los campos');
+                    return;
+                }
+
+                await saveData(nombre, apellido, deporte);
+            });
+
+            // Cargar datos al iniciar la página
+            loadData();
+
+            // Añadir opciones al select
+            const deportes = ['🏃🏽 Atletismo', '🏀 Básquebol', '🏓 Tenis de mesa', '🏁 Naciones', '🏐 Voleybol', '🏉 Rugby'];
+            deportes.forEach(dep => {
+                const option = document.createElement('option');
+                option.value = dep;
+                option.textContent = dep;
+                deporteSelect.appendChild(option);
+            });
         });
-
-        // Cargar datos al iniciar la página
-        window.onload = loadData;
-
-        // Añadir opciones al select
-        const deportes = ['Fútbol', 'Baloncesto', 'Tenis', 'Natación'];
-        console.log('Añadiendo deportes al selector:', deportes); // Depuración
-        deportes.forEach(dep => {
-            const option = document.createElement('option');
-            option.value = dep;
-            option.textContent = dep;
-            deporteSelect.appendChild(option);
-        });
-        console.log('Opciones añadidas al selector:', deporteSelect.options.length); // Verificar cuántas opciones hay
     </script>
 </body>
 </html>
