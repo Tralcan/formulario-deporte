@@ -6,7 +6,67 @@
     <title>Formulario Deportivo</title>
     <!-- Estilos CSS (los mismos que antes) -->
     <style>
-        /* Tu CSS aquí, sin cambios */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a3c34, #2d6a4f);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+
+        .form-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2d6a4f;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #1a3c34;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #2d6a4f;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem;
+            background: #2d6a4f;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #1a3c34;
+        }
     </style>
 </head>
 <body>
@@ -51,7 +111,7 @@
             // Cargar datos guardados al iniciar
             async function loadData() {
                 const { data, error } = await supabase
-                    .from('tu_tabla')
+                    .from('formulario')
                     .select('*')
                     .order('created_at', { ascending: false })
                     .limit(1);
