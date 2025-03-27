@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario Diario</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Cargar datos almacenados
+            if(localStorage.getItem("nombre")) {
+                document.getElementById("nombre").value = localStorage.getItem("nombre");
+            }
+            if(localStorage.getItem("deporte")) {
+                document.getElementById("deporte").value = localStorage.getItem("deporte");
+            }
+
+            // Guardar datos al enviar el formulario
+            document.getElementById("formulario").addEventListener("submit", function() {
+                localStorage.setItem("nombre", document.getElementById("nombre").value);
+                localStorage.setItem("deporte", document.getElementById("deporte").value);
+            });
+        });
+    </script>
+</head>
+<body>
+    <form id="formulario">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required>
+        <br>
+        <label for="deporte">Deporte:</label>
+        <input type="text" id="deporte" name="deporte" required>
+        <br>
+        <button type="submit">Enviar</button>
+    </form>
+</body>
+</html>
