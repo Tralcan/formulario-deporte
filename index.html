@@ -30,12 +30,6 @@
             margin-bottom: 1.5rem;
             font-size: 2rem;
         }
-         h3 {
-            text-align: center;
-            color: black;
-            margin-bottom: 1rem;
-            font-size: 1rem;
-        }
 
         .form-group {
             margin-bottom: 1rem;
@@ -73,9 +67,8 @@
             background: #1a3c34;
         }
 
-        /* Estilos para la imagen de éxito */
         .success-image {
-            display: none; /* Oculta por defecto */
+            display: none;
             max-width: 100%;
             height: auto;
             border-radius: 15px;
@@ -85,8 +78,7 @@
 </head>
 <body>
     <div class="form-container" id="formContainer">
-        <h1>Team Dragon 🐲</h1>
-        <h3>Asistencia Obligatoria</h3>
+        <h1>Registro Deportivo</h1>
         <form id="sportForm">
             <div class="form-group">
                 <label for="nombre">Nombre</label>
@@ -156,7 +148,6 @@
                 alert('Error al enviar los datos');
             } else {
                 console.log('Datos guardados:', data);
-                // Ocultar formulario y mostrar imagen
                 form.style.display = 'none';
                 formContainer.querySelector('h1').style.display = 'none';
                 successImage.style.display = 'block';
@@ -183,12 +174,14 @@
 
         // Añadir opciones al select
         const deportes = ['Fútbol', 'Baloncesto', 'Tenis', 'Natación'];
+        console.log('Añadiendo deportes al selector:', deportes); // Depuración
         deportes.forEach(dep => {
             const option = document.createElement('option');
             option.value = dep;
             option.textContent = dep;
             deporteSelect.appendChild(option);
         });
+        console.log('Opciones añadidas al selector:', deporteSelect.options.length); // Verificar cuántas opciones hay
     </script>
 </body>
 </html>
