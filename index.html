@@ -4,68 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario Deportivo</title>
+    <!-- Estilos CSS (los mismos que antes) -->
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #1a3c34, #2d6a4f);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0;
-        }
-
-        .form-container {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            width: 100%;
-            max-width: 400px;
-        }
-
-        h1 {
-            text-align: center;
-            color: #2d6a4f;
-            margin-bottom: 1.5rem;
-            font-size: 2rem;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #1a3c34;
-            font-weight: bold;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 0.8rem;
-            border: 2px solid #2d6a4f;
-            border-radius: 8px;
-            font-size: 1rem;
-            box-sizing: border-box;
-        }
-
-        button {
-            width: 100%;
-            padding: 1rem;
-            background: #2d6a4f;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        button:hover {
-            background: #1a3c34;
-        }
+        /* Tu CSS aquí, sin cambios */
     </style>
 </head>
 <body>
@@ -84,89 +25,91 @@
                 <label for="deporte">Deporte</label>
                 <select id="deporte" name="deporte" required>
                     <option value="">Selecciona un deporte</option>
-                    <option value="Atletismo">Atletismo</option>
-                    <!-- Las opciones se añadirán dinámicamente o puedes agregarlas manualmente -->
                 </select>
             </div>
             <button type="submit">Enviar</button>
         </form>
     </div>
 
+    <!-- Cargar Supabase CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // Inicializa Supabase -- codigo original --
-        const supabase = supabase.createClient(
-            'https://qqvkbwnyhjevrdyhvxbv.supabase.co',
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxdmtid255aGpldnJkeWh2eGJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMwOTIxMTgsImV4cCI6MjA1ODY2ODExOH0.3ACxuOf_NWjzz0yYjxVPstVrG08pb1ulG-BNEofW6Yc'
-        );
+        // Esperar a que el script de Supabase se cargue
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializa Supabase
+            const supabase = window.supabase.createClient(
+                'https://qqvkbwnyhjevrdyhvxbv.supabase.co', // Reemplaza con tu URL
+                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxdmtid255aGpldnJkeWh2eGJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMwOTIxMTgsImV4cCI6MjA1ODY2ODExOH0.3ACxuOf_NWjzz0yYjxVPstVrG08pb1ulG-BNEofW6Yc'      // Reemplaza con tu API Key
+            );
 
-        // Elementos del formulario
-        const form = document.getElementById('sportForm');
-        const nombreInput = document.getElementById('nombre');
-        const apellidoInput = document.getElementById('apellido');
-        const deporteSelect = document.getElementById('deporte');
+            // Elementos del formulario
+            const form = document.getElementById('sportForm');
+            const nombreInput = document.getElementById('nombre');
+            const apellidoInput = document.getElementById('apellido');
+            const deporteSelect = document.getElementById('deporte');
 
-        // Cargar datos guardados al iniciar
-        async function loadData() {
-            const { data, error } = await supabase
-                .from('formulario') // Reemplaza con el nombre de tu tabla
-                .select('*')
-                .order('created_at', { ascending: false })
-                .limit(1);
+            // Cargar datos guardados al iniciar
+            async function loadData() {
+                const { data, error } = await supabase
+                    .from('tu_tabla')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(1);
 
-            if (error) {
-                console.error('Error al cargar datos:', error);
-                return;
+                if (error) {
+                    console.error('Error al cargar datos:', error);
+                    return;
+                }
+
+                if (data && data.length > 0) {
+                    nombreInput.value = data[0].nombre;
+                    apellidoInput.value = data[0].apellido;
+                    deporteSelect.value = data[0].deporte;
+                }
             }
 
-            if (data && data.length > 0) {
-                nombreInput.value = data[0].nombre;
-                apellidoInput.value = data[0].apellido;
-                deporteSelect.value = data[0].deporte;
-            }
-        }
+            // Guardar datos en Supabase
+            async function saveData(nombre, apellido, deporte) {
+                const { data, error } = await supabase
+                    .from('tu_tabla')
+                    .insert([
+                        { nombre, apellido, deporte }
+                    ]);
 
-        // Guardar datos en Supabase
-        async function saveData(nombre, apellido, deporte) {
-            const { data, error } = await supabase
-                .from('tu_tabla')
-                .insert([
-                    { nombre, apellido, deporte }
-                ]);
-
-            if (error) {
-                console.error('Error al guardar:', error);
-            } else {
-                console.log('Datos guardados:', data);
-                alert('¡Datos enviados correctamente!');
-            }
-        }
-
-        // Manejar el envío del formulario
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const nombre = nombreInput.value;
-            const apellido = apellidoInput.value;
-            const deporte = deporteSelect.value;
-
-            if (!nombre || !apellido || !deporte) {
-                alert('Por favor, completa todos los campos');
-                return;
+                if (error) {
+                    console.error('Error al guardar:', error);
+                } else {
+                    console.log('Datos guardados:', data);
+                    alert('¡Datos enviados correctamente!');
+                }
             }
 
-            await saveData(nombre, apellido, deporte);
-        });
+            // Manejar el envío del formulario
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const nombre = nombreInput.value;
+                const apellido = apellidoInput.value;
+                const deporte = deporteSelect.value;
 
-        // Cargar datos al iniciar la página
-        window.onload = loadData;
+                if (!nombre || !apellido || !deporte) {
+                    alert('Por favor, completa todos los campos');
+                    return;
+                }
 
-        // Opcional: Añadir opciones al select manualmente
-        const deportes = ['Fútbol', 'Baloncesto', 'Tenis', 'Natación']; // Ejemplo
-        deportes.forEach(dep => {
-            const option = document.createElement('option');
-            option.value = dep;
-            option.textContent = dep;
-            deporteSelect.appendChild(option);
+                await saveData(nombre, apellido, deporte);
+            });
+
+            // Cargar datos al iniciar la página
+            loadData();
+
+            // Añadir opciones al select
+            const deportes = ['Fútbol', 'Baloncesto', 'Tenis', 'Natación'];
+            deportes.forEach(dep => {
+                const option = document.createElement('option');
+                option.value = dep;
+                option.textContent = dep;
+                deporteSelect.appendChild(option);
+            });
         });
     </script>
 </body>
