@@ -95,10 +95,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         // Inicializa Supabase (reemplaza con tus credenciales)
-        const supabase = Supabase.createClient(
-            'https://qqvkbwnyhjevrdyhvxbv.supabase.co',
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxdmtid255aGpldnJkeWh2eGJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMwOTIxMTgsImV4cCI6MjA1ODY2ODExOH0.3ACxuOf_NWjzz0yYjxVPstVrG08pb1ulG-BNEofW6Yc'
-        );
+        const supabaseUrl = 'https://qqvkbwnyhjevrdyhvxbv.supabase.co';
+        const supabaseKey = process.env.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxdmtid255aGpldnJkeWh2eGJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMwOTIxMTgsImV4cCI6MjA1ODY2ODExOH0.3ACxuOf_NWjzz0yYjxVPstVrG08pb1ulG-BNEofW6Yc;
+        const supabase = createClient(supabaseUrl, supabaseKey);
 
         // Elementos del formulario
         const form = document.getElementById('sportForm');
