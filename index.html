@@ -146,13 +146,22 @@
             const rutInput = document.getElementById('rut');
             const deporteSelect = document.getElementById('deporte');
 
+            // Añadir opciones al select primero
+            const deportes = ['🏃🏽 Atletismo', '🏀 Básquebol', '🏓 Tenis de mesa', '🏁 Naciones', '🏐 Voleybol', '🏉 Rugby'];
+            deportes.forEach(dep => {
+                const option = document.createElement('option');
+                option.value = dep;
+                option.textContent = dep;
+                deporteSelect.appendChild(option);
+            });
+
             // Cargar datos desde localStorage al iniciar
             function loadLocalData() {
                 const savedData = JSON.parse(localStorage.getItem('sportFormData')) || {};
                 nombreInput.value = savedData.nombre || '';
                 apellidoInput.value = savedData.apellido || '';
                 rutInput.value = savedData.rut || '';
-                deporteSelect.value = savedData.deporte || '';
+                deporteSelect.value = savedData.deporte || ''; // Ahora funciona porque las opciones ya están cargadas
             }
 
             // Guardar datos en Supabase y localStorage
@@ -200,15 +209,6 @@
 
             // Cargar datos al iniciar la página desde localStorage
             loadLocalData();
-
-            // Añadir opciones al select
-            const deportes = ['🏃🏽 Atletismo', '🏀 Básquebol', '🏓 Tenis de mesa', '🏁 Naciones', '🏐 Voleybol', '🏉 Rugby'];
-            deportes.forEach(dep => {
-                const option = document.createElement('option');
-                option.value = dep;
-                option.textContent = dep;
-                deporteSelect.appendChild(option);
-            });
         });
     </script>
 </body>
